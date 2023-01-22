@@ -240,7 +240,7 @@ public class add_product_controller implements Initializable {
 
             }
         catch (NumberFormatException e){
-            Alert format = new Alert (Alert.AlertType.ERROR, "it looks like your trying to place a word where a number needs to go.", ButtonType.OK);
+            Alert format = new Alert (Alert.AlertType.ERROR, "it looks like your trying to place a word where a number needs to go. Or have failed to fill out required forms.", ButtonType.OK);
             format.showAndWait();
 
         }

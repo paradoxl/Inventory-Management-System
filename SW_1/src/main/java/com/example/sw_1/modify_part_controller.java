@@ -51,7 +51,7 @@ public class modify_part_controller {
     Alert numberError = new Alert(Alert.AlertType.ERROR, "Plese check Machine ID only numbers allowed.", ButtonType.OK);
     Alert idError = new Alert(Alert.AlertType.ERROR, "You must select a valid ID number",ButtonType.OK);
     Alert minMaxError = new Alert(Alert.AlertType.ERROR, "Check your min max fields. Those need to correlate with inventory.", ButtonType.OK);
-    Alert Word = new Alert(Alert.AlertType.ERROR,"It looks like you've placed a word in a number value");
+    Alert Word = new Alert(Alert.AlertType.ERROR,"It looks like you've placed a word in a number value. Or have failed to complete required forms.");
 
     Parent Stage;
 

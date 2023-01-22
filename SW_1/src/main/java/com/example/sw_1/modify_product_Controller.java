@@ -30,7 +30,7 @@ public class modify_product_Controller implements Initializable {
     Alert checkStock = new Alert (Alert.AlertType.ERROR, "Please review min, max, and stock.", ButtonType.OK);
     Alert save = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you wish to save this product?", ButtonType.YES,ButtonType.NO);
     Alert missingPart = new Alert(Alert.AlertType.ERROR, "You have no selected a part", ButtonType.OK);
-    Alert word = new Alert(Alert.AlertType.ERROR, "It looks like you are placing a word where a number goes");
+    Alert word = new Alert(Alert.AlertType.ERROR, "It looks like you are placing a word where a number goes Or have failed to complete required forms", ButtonType.OK);
     //Textfields
     @FXML
     private TextField idTextFLD;

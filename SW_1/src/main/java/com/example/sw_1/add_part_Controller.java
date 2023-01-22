@@ -49,7 +49,7 @@ public class add_part_Controller {
 
     Alert cancelButtonAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you wish to leave this panel?", ButtonType.YES, ButtonType.NO);
     Alert confirmSave = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to save this part?", ButtonType.YES, ButtonType.NO);
-    Alert overAllError = new Alert(Alert.AlertType.ERROR, "it's likely you have placed a word in a placeholder for numbers", ButtonType.OK);
+    Alert overAllError = new Alert(Alert.AlertType.ERROR, "It's likely you have placed a word in a placeholder for numbers, or have failed to complete required forms", ButtonType.OK);
     Alert minMaxError = new Alert(Alert.AlertType.ERROR, "Check your min max fields. Those need to correlate with inventory.", ButtonType.OK);
 
     /**
@@ -133,10 +133,10 @@ public class add_part_Controller {
             }
         } catch (NumberFormatException e) {
             overAllError.showAndWait();
-            throw new RuntimeException(e);
+
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+
         }
     }
 
