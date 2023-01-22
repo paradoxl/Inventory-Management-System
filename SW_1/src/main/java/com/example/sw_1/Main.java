@@ -23,9 +23,9 @@ public class Main extends Application {
     Inventory.addPart(new InHouse(2,"AMD GPU", 999.99, 3, 1, 10, 26));
     Inventory.addPart(new Outsourced(3,"NVME Drive", 99.99, 51, 1, 100, "keyboard store" ));
 
-    Inventory.addProduct(new Product(1, "AMD Pre-Built", 1999.99,2,1,3,false));
-    Inventory.addProduct(new Product(2,"Das-Keyboard", 99.99, 10,1,100,false));
-    Inventory.addProduct(new Product(3,"Logitech-Mouse",50.99,11,1,100,false));
+    Inventory.addProduct(new Product(1, "AMD Pre-Built", 1999.99,2,1,3));
+    Inventory.addProduct(new Product(2,"Das-Keyboard", 99.99, 10,1,100));
+    Inventory.addProduct(new Product(3,"Logitech-Mouse",50.99,11,1,100));
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main-view.fxml"));

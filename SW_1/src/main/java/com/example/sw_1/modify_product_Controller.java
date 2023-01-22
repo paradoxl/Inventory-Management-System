@@ -74,6 +74,7 @@ public class modify_product_Controller implements Initializable {
     boolean checkAdd = false;
     Boolean containsParts = false;
 
+
     // populates both the bottom and top tables with parts that are contained within the system and parts that are
     // associated with one of the products.
 
@@ -82,6 +83,7 @@ public class modify_product_Controller implements Initializable {
      * @param location
      * @param resoruces
      */
+
     public void initialize(URL location , ResourceBundle resoruces){
         topTable.setItems(Inventory.getParts());
         topIdCOL.setCellValueFactory(new PropertyValueFactory<Part,Integer>("id"));
@@ -89,7 +91,8 @@ public class modify_product_Controller implements Initializable {
         topInvCOL.setCellValueFactory(new PropertyValueFactory<Part,Integer>("stock"));
         topPriceCOL.setCellValueFactory(new PropertyValueFactory<Part,Double>("price"));
 
-        botTable.setItems(Product.getAllAssociatedParts());
+
+        botTable.setItems(used);
         botIdCOL.setCellValueFactory(new PropertyValueFactory<Part,Integer>("id"));
         botNameCOL.setCellValueFactory(new PropertyValueFactory<Part,String>("name"));
         botInvCOL.setCellValueFactory(new PropertyValueFactory<Part,Integer>("stock"));
@@ -143,16 +146,25 @@ public class modify_product_Controller implements Initializable {
      */
     public void addPart(ActionEvent actionEvent){
         Part selected = topTable.getSelectionModel().getSelectedItem();
+//        if(topTable.getSelectionModel().getSelectedItem() != null) {
+//            used.add(selected);
+//            //TODO add associated part
+////            Product.addAssociatedPart(selected);
+//            used.add(current.addAssociatedPart(selected));
+//            checkAdd = true;
+//            containsParts = true;
+//        }
+//        else{
+//            missingPart.showAndWait();
+//        }
+
         if(topTable.getSelectionModel().getSelectedItem() != null) {
             used.add(selected);
-            Product.addAssociatedPart(selected);
-            checkAdd = true;
-            containsParts = true;
-        }
-        else{
-            missingPart.showAndWait();
+
+
         }
     }
+
 
     /**
      * This method is used to save the modifations made to the currently selected product.
@@ -162,8 +174,9 @@ public class modify_product_Controller implements Initializable {
      * @throws IOException
      */
     public void saveProduct(ActionEvent actionEvent) throws IOException {
+        //todo REMOVE associated part
         try {
-            if (Product.getAllAssociatedParts().isEmpty()) {
+            if (current.getAllAssociatedParts().isEmpty()) {
                 containsParts = false;
             }
             int id = Integer.parseInt(idTextFLD.getText());
@@ -180,15 +193,13 @@ public class modify_product_Controller implements Initializable {
                 } else if (inv < min && inv > max) {
                     checkStock.showAndWait();
                 } else {
-//           if (checkAdd) {
-                    System.out.println("HERE");
-//               containsParts = true;
                     current.setName(name);
                     current.setStock(inv);
                     current.setPrice(price);
                     current.setMin(min);
                     current.setMax(max);
-                    current.setContainsParts(containsParts);
+                    current.addAssociatedPart(used);
+                    System.out.println("in save" + current.getAllAssociatedParts());
                     System.out.println(current.getId());
                     Inventory.updateProduct(current.getId(), current);
                     Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -196,19 +207,6 @@ public class modify_product_Controller implements Initializable {
                     stage.setTitle("Inventory Management System");
                     stage.setScene(new Scene(scene));
                     stage.show();
-//           } else {
-//               current.setName(name);
-//               current.setStock(inv);
-//               current.setPrice(price);
-//               current.setMin(min);
-//               current.setMax(max);
-//               Inventory.updateProduct(current.getId(), current);
-//               Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-//               scene = FXMLLoader.load(getClass().getResource("main-view.fxml"));
-//               stage.setTitle("Inventory Management System");
-//               stage.setScene(new Scene(scene));
-//               stage.show();
-//           }
                 }
             }
         }
@@ -220,23 +218,25 @@ public class modify_product_Controller implements Initializable {
     }
 
     /**
-     * This method is used to delete items from the lower table. Will ask for confirmation up removal.
+     * This method is used to delete items from the lower table. Will ask for confirmation upon removal.
      * @param actionEvent
      */
     public void deletePart(ActionEvent actionEvent){
+        // TODO delete part
+//
+
         Alert alert = new Alert(Alert.AlertType.ERROR, "No parts have been selected to remove", ButtonType.OK);
+        Part selected = botTable.getSelectionModel().getSelectedItem();
         if (botTable.getSelectionModel().isEmpty()) {
             alert.showAndWait();
             return;
         }
         removePart.showAndWait();
-        if (removePart.getResult() == ButtonType.YES){
+        if (removePart.getResult() == ButtonType.YES) {
             botTable.getItems().remove(botTable.getSelectionModel().getSelectedIndex());
-            Product.deleteAssociatedPart(botTable.getSelectionModel().getSelectedIndex());
-            if(Product.getAllAssociatedParts().isEmpty()) {
-                containsParts = false;
-            }
-            System.out.println(Product.getAllAssociatedParts());
+            used.remove(selected);
+            current.deleteAssociatedPart(selected);
+            botTable.refresh();
         }
     }
 
@@ -261,13 +261,16 @@ public class modify_product_Controller implements Initializable {
         }
 
     }
-
+    public void setAssociated(Product current){
+        used.addAll(current.getAllAssociatedParts());
+    }
     /**
      * This method is used to populate data on the left hand side of the modify product pane.
      * The Id selection should be greyed out and the user will not be able to edit this.
      * ID is set to auto increment.
      * @param current
      */
+
     public void populateLeftPane(Product current){
         this.current = current;
        int id = current.getId();
@@ -286,7 +289,7 @@ public class modify_product_Controller implements Initializable {
        int max = current.getMax();
        String maxButString = String.valueOf(max);
        maxTextFLD.setText(maxButString);
-
+       used.addAll(current.getAllAssociatedParts());
 
     }
 }

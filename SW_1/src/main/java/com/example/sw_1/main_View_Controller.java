@@ -101,7 +101,6 @@ public class main_View_Controller implements Initializable {
         productNameCOL.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
         productInventoryCOL.setCellValueFactory(new PropertyValueFactory<Product, Integer>("stock"));
         productPriceCOL.setCellValueFactory(new PropertyValueFactory<Product,Double>("price"));
-        containsParts.setCellValueFactory(new PropertyValueFactory<Product,Boolean>("containsParts"));
     }
 
     /**
@@ -223,9 +222,12 @@ public class main_View_Controller implements Initializable {
     @FXML
     public void deleteProduct(ActionEvent actionEvent) {
         Product current = ProductTABLE.getSelectionModel().getSelectedItem();
+        System.out.println(current.getAllAssociatedParts());
         try {
-            if (current.getContainsParts()) {
+            System.out.println(current.getAllAssociatedParts());
+            if (!current.getAllAssociatedParts().isEmpty()) {
                 partInside.showAndWait();
+                System.out.println("inside");
                 return;
             }
         }

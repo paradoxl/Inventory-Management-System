@@ -13,9 +13,9 @@ public class Product {
     private int stock;
     private int min;
     private int max;
-    private Boolean containsParts;
-    private ObservableList<Part> addedPart = FXCollections.observableArrayList();
-    private static ObservableList<Part> associatedPart = FXCollections.observableArrayList();
+
+//    private ObservableList<Part> addedPart = FXCollections.observableArrayList();
+    private ObservableList<Part> associatedPart = FXCollections.observableArrayList();
     /**
      * Custom constructor to set variables.
      * @param id
@@ -24,16 +24,22 @@ public class Product {
      * @param stock
      * @param min
      * @param max
-     * @param containsParts
      */
-    public Product(int id, String name, double price, int stock, int min, int max, Boolean containsParts){
+    public Product(int id, String name, double price, int stock, int min, int max){
         this.id = id;
         this.name = name;
         this.price = price;
         this.stock = stock;
         this.min = min;
         this.max = max;
-        this.containsParts = containsParts;
+
+    }
+
+    /**
+     * custom empty constructor
+     */
+    public Product(){
+
     }
 
     /**
@@ -84,13 +90,7 @@ public class Product {
         this.max = max;
     }
 
-    public void setContainsParts(Boolean containsParts) {
-        this.containsParts = containsParts;
-    }
 
-    public Boolean getContainsParts() {
-        return containsParts;
-    }
 
     /**
      * Return Id.
@@ -146,9 +146,9 @@ public class Product {
      * This method adds associated parts to the product.
      * @param part
      */
-    public static void addAssociatedPart(Part part){
+    public void addAssociatedPart(ObservableList<Part> part){
 
-      associatedPart.add(part);
+      this.associatedPart.addAll(part);
     }
 
     /**
@@ -156,12 +156,8 @@ public class Product {
      * @param partID
      * @return
      */
-    public static boolean deleteAssociatedPart(int partID){
-        for(int i = 0; i < associatedPart.size(); i++){
-            if(associatedPart.get(i).getId() == partID){
-                associatedPart.remove(i);
-            }
-        }
+    public  boolean deleteAssociatedPart(Part part){
+    associatedPart.remove(part);
        return true;
     }
 
@@ -169,7 +165,7 @@ public class Product {
      * This returns all associatedParts.
      * @return
      */
-    public static ObservableList<Part> getAllAssociatedParts(){
+    public  ObservableList<Part> getAllAssociatedParts(){
        return associatedPart;
     }
 

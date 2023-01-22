@@ -77,12 +77,14 @@ public class add_product_controller implements Initializable {
     Alert minMaxError = new Alert(Alert.AlertType.ERROR, "Check your min max fields. Those need to correlate with inventory.", ButtonType.OK);
     Alert save = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you wish to save this product?", ButtonType.YES,ButtonType.NO);
     Alert checkStock = new Alert (Alert.AlertType.ERROR, "Please review min, max, and stock.", ButtonType.OK);
+    Product product = new Product();
 
     /**
      * This method is used to populate the tables.
      * @param location
      * @param resoruces
      */
+
     public void initialize(URL location, ResourceBundle resoruces) {
 
         System.out.println(used);
@@ -93,7 +95,7 @@ public class add_product_controller implements Initializable {
         topInvCOL.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
         topPriceCOL.setCellValueFactory(new PropertyValueFactory<Part, Double>("price"));
 
-        botTABLE.setItems(Product.getAllAssociatedParts());
+        botTABLE.setItems(used);
         botIDCOL.setCellValueFactory(new PropertyValueFactory<Part, Integer>("id"));
         botNameCOL.setCellValueFactory(new PropertyValueFactory<Part, String>("name"));
         botInvCOL.setCellValueFactory(new PropertyValueFactory<Part, Integer>("stock"));
@@ -127,12 +129,16 @@ public class add_product_controller implements Initializable {
     public void addPart(ActionEvent actionEvent) {
         Part selected = topTABLE.getSelectionModel().getSelectedItem();
         if(topTABLE.getSelectionModel().getSelectedItem() != null) {
+//            used.add(selected);
+//            product.addAssociatedPart(selected);
+//            used.add(selected);
+//            containsParts = true;
             used.add(selected);
-            Product.addAssociatedPart(selected);
-            containsParts = true;
+
         }
         else{
             missingPart.showAndWait();
+
         }
     }
 
@@ -142,6 +148,7 @@ public class add_product_controller implements Initializable {
      */
     public void deletePart(ActionEvent actionEvent) {
         Alert alert = new Alert(Alert.AlertType.ERROR, "No parts have been selected to remove", ButtonType.OK);
+        Part selected = botTABLE.getSelectionModel().getSelectedItem();
         if (botTABLE.getSelectionModel().isEmpty()) {
             alert.showAndWait();
             return;
@@ -149,8 +156,8 @@ public class add_product_controller implements Initializable {
         removePart.showAndWait();
         if (removePart.getResult() == ButtonType.YES) {
             botTABLE.getItems().remove(botTABLE.getSelectionModel().getSelectedIndex());
+            used.remove(selected);
             botTABLE.refresh();
-            containsParts = false;
         }
     }
 
@@ -206,29 +213,32 @@ public class add_product_controller implements Initializable {
                 } else if (inv < min && inv > max) {
                     checkStock.showAndWait();
                 } else {
-                    if (checkAdd) {
+
                         System.out.println("HERE");
                         Boolean containsParts = true;
+                        Product current = new Product(1, name, price, inv, min, max);
+                        current.addAssociatedPart(used);
+                        System.out.println("Part has been added" + current.getAllAssociatedParts());
+                        Inventory.addProduct(current);
+                        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+                        scene = FXMLLoader.load(getClass().getResource("main-view.fxml"));
+                        stage.setTitle("Inventory Management System");
+                        stage.setScene(new Scene(scene));
+                        stage.show();
 
-                        Product current = new Product(1, name, price, inv, min, max,containsParts);
-                        Inventory.addProduct(current);
-                        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-                        scene = FXMLLoader.load(getClass().getResource("main-view.fxml"));
-                        stage.setTitle("Inventory Management System");
-                        stage.setScene(new Scene(scene));
-                        stage.show();
-                    } else {
-                        Product current = new Product(1, name, price, inv, min, max,containsParts);
-                        Inventory.addProduct(current);
-                        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-                        scene = FXMLLoader.load(getClass().getResource("main-view.fxml"));
-                        stage.setTitle("Inventory Management System");
-                        stage.setScene(new Scene(scene));
-                        stage.show();
-                    }
+//                    else {
+//                        Product current = new Product(1, name, price, inv, min, max);
+//                        Inventory.addProduct(current);
+//                        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+//                        scene = FXMLLoader.load(getClass().getResource("main-view.fxml"));
+//                        stage.setTitle("Inventory Management System");
+//                        stage.setScene(new Scene(scene));
+//                        stage.show();
+//                    }
                 }
             }
-        }
+
+            }
         catch (NumberFormatException e){
             Alert format = new Alert (Alert.AlertType.ERROR, "it looks like your trying to place a word where a number needs to go.", ButtonType.OK);
             format.showAndWait();
