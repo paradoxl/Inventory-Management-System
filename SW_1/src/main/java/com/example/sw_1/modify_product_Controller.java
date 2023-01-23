@@ -150,12 +150,13 @@ public class modify_product_Controller implements Initializable {
             used.add(selected);
         }
     }
-
+    //used has a second item in the bot table when saved.
 
     /**
      * This method is used to save the modifations made to the currently selected product.
      * There were some logical errors here as I tried to determine where the product had associated parts or not.
-     * The solution was simple and required another observable list to store parts that were associated.
+     * I ran into an issue where the save button would create duplicates of assoc parts. This was solved by adding a clear
+     * to the logic before adding new assoc parts again.
      * @param actionEvent
      * @throws IOException
      */
@@ -185,7 +186,9 @@ public class modify_product_Controller implements Initializable {
                     current.setMin(min);
                     current.setMax(max);
                     System.out.println("Used " + used);
+                    current.getAllAssociatedParts().clear();
                     for(Part part:used) {
+
                         current.addAssociatedPart(part);
                     }
                     // how to add one part at a time to the list.
@@ -217,6 +220,7 @@ public class modify_product_Controller implements Initializable {
         Part selected = botTable.getSelectionModel().getSelectedItem();
         if (botTable.getSelectionModel().isEmpty()) {
             alert.showAndWait();
+            used.removeAll();
             return;
         }
         removePart.showAndWait();
