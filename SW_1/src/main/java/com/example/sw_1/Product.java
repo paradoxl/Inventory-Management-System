@@ -146,14 +146,14 @@ public class Product {
      * This method adds associated parts to the product.
      * @param part
      */
-    public void addAssociatedPart(ObservableList<Part> part){
+    public void addAssociatedPart(Part part){
 
-      this.associatedPart.addAll(part);
+      associatedPart.add(part);
     }
 
     /**
      * This method removes associated parts to the product.
-     * @param partID
+     * @param part
      * @return
      */
     public  boolean deleteAssociatedPart(Part part){

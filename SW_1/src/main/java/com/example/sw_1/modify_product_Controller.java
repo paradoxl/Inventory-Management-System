@@ -146,22 +146,8 @@ public class modify_product_Controller implements Initializable {
      */
     public void addPart(ActionEvent actionEvent){
         Part selected = topTable.getSelectionModel().getSelectedItem();
-//        if(topTable.getSelectionModel().getSelectedItem() != null) {
-//            used.add(selected);
-//            //TODO add associated part
-////            Product.addAssociatedPart(selected);
-//            used.add(current.addAssociatedPart(selected));
-//            checkAdd = true;
-//            containsParts = true;
-//        }
-//        else{
-//            missingPart.showAndWait();
-//        }
-
         if(topTable.getSelectionModel().getSelectedItem() != null) {
             used.add(selected);
-
-
         }
     }
 
@@ -176,9 +162,9 @@ public class modify_product_Controller implements Initializable {
     public void saveProduct(ActionEvent actionEvent) throws IOException {
         //todo REMOVE associated part
         try {
-            if (current.getAllAssociatedParts().isEmpty()) {
-                containsParts = false;
-            }
+//            if (current.getAllAssociatedParts().isEmpty()) {
+//                containsParts = false;
+//            }
             int id = Integer.parseInt(idTextFLD.getText());
             String name = nameTextFLD.getText();
             int inv = Integer.parseInt(invTextFLD.getText());
@@ -198,9 +184,11 @@ public class modify_product_Controller implements Initializable {
                     current.setPrice(price);
                     current.setMin(min);
                     current.setMax(max);
-                    current.addAssociatedPart(used);
-                    System.out.println("in save" + current.getAllAssociatedParts());
-                    System.out.println(current.getId());
+                    System.out.println("Used " + used);
+                    for(Part part:used) {
+                        current.addAssociatedPart(part);
+                    }
+                    // how to add one part at a time to the list.
                     Inventory.updateProduct(current.getId(), current);
                     Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
                     scene = FXMLLoader.load(getClass().getResource("main-view.fxml"));
@@ -233,9 +221,8 @@ public class modify_product_Controller implements Initializable {
         }
         removePart.showAndWait();
         if (removePart.getResult() == ButtonType.YES) {
-            botTable.getItems().remove(botTable.getSelectionModel().getSelectedIndex());
-            used.remove(selected);
-            current.deleteAssociatedPart(selected);
+            botTable.getItems().remove(botTable.getSelectionModel().getSelectedItem());
+            used.remove(botTable.getSelectionModel().getSelectedCells());
             botTable.refresh();
         }
     }
@@ -261,9 +248,7 @@ public class modify_product_Controller implements Initializable {
         }
 
     }
-    public void setAssociated(Product current){
-        used.addAll(current.getAllAssociatedParts());
-    }
+
     /**
      * This method is used to populate data on the left hand side of the modify product pane.
      * The Id selection should be greyed out and the user will not be able to edit this.

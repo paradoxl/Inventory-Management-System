@@ -133,7 +133,8 @@ public class add_product_controller implements Initializable {
 //            product.addAssociatedPart(selected);
 //            used.add(selected);
 //            containsParts = true;
-            used.add(selected);
+            used.add(topTABLE.getSelectionModel().getSelectedItem());
+            System.out.println(used);
 
         }
         else{
@@ -155,8 +156,8 @@ public class add_product_controller implements Initializable {
         }
         removePart.showAndWait();
         if (removePart.getResult() == ButtonType.YES) {
-            botTABLE.getItems().remove(botTABLE.getSelectionModel().getSelectedIndex());
-            used.remove(selected);
+            botTABLE.getItems().remove(botTABLE.getSelectionModel().getSelectedItem());
+            used.remove(botTABLE.getSelectionModel().getSelectedCells());
             botTABLE.refresh();
         }
     }
@@ -217,7 +218,9 @@ public class add_product_controller implements Initializable {
                         System.out.println("HERE");
                         Boolean containsParts = true;
                         Product current = new Product(1, name, price, inv, min, max);
-                        current.addAssociatedPart(used);
+                        for(Part part: used){
+                            current.addAssociatedPart(part);
+                        }
                         System.out.println("Part has been added" + current.getAllAssociatedParts());
                         Inventory.addProduct(current);
                         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
