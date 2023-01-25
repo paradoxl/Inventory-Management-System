@@ -97,8 +97,8 @@ public class add_part_Controller {
             int maximum = Integer.parseInt(maxTextFLD.getText());
             confirmSave.showAndWait();
             if (confirmSave.getResult() == ButtonType.YES){
-                if(maximum > minimum){
-                   if(inv >= minimum && inv < maximum){
+                if(maximum >= minimum){
+                   if(inv >= minimum && inv <= maximum){
 
                         String name = NameTextFLD.getText();
                         int stock = inv;
